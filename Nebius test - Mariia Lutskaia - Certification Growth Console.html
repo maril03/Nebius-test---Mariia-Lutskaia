@@ -1,0 +1,595 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Certification Growth Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,wght@1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --page:#f2ece1; --surface:#fffdf9; --surface-2:#e9e1d2;
+    --ink:#1c1712; --ink-2:#5a5347; --muted:#948c7d;
+    --border:rgba(28,23,18,0.12); --gridline:#e3dbca; --baseline:#c9c0ac;
+    --accent-a:#241b5e; --accent-b:#8b5cd6; --accent-ink:#ffffff;
+    --accent-strong:#3d2c86; --accent-soft:#ece5f8;
+    --good:#0ca30c; --good-soft:#e5f6e5;
+    --warning:#c98100; --warning-soft:#fff2d6;
+    --serious:#c95a34; --serious-soft:#fce6dd;
+    --critical:#d03b3b; --critical-soft:#fbe7e7;
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#c98500; --s5:#e0669a;
+    --shadow: 0 1px 2px rgba(28,23,18,0.05), 0 8px 24px -12px rgba(28,23,18,0.14);
+    --font-display:'Inter',system-ui,sans-serif;
+    --font-body:'Inter',system-ui,sans-serif;
+    --font-serif:'Newsreader',Georgia,serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --page:#19151c; --surface:#221d27; --surface-2:#2a232f;
+      --ink:#f4efe6; --ink-2:#c9c1b5; --muted:#948c80;
+      --border:rgba(255,255,255,0.12); --gridline:#332c39; --baseline:#3d3542;
+      --accent-a:#8b5cd6; --accent-b:#c9a6f2; --accent-ink:#1c1024;
+      --accent-strong:#c9b3f2; --accent-soft:rgba(155,120,219,0.16);
+      --good:#3fc23f; --good-soft:rgba(63,194,63,0.14);
+      --warning:#fab219; --warning-soft:rgba(250,178,25,0.14);
+      --serious:#ec835a; --serious-soft:rgba(236,131,90,0.14);
+      --critical:#e66767; --critical-soft:rgba(230,103,103,0.14);
+      --s1:#5b9bf0; --s2:#e8804d; --s3:#2fc78e; --s4:#e0a63a; --s5:#e987b0;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --page:#19151c; --surface:#221d27; --surface-2:#2a232f;
+    --ink:#f4efe6; --ink-2:#c9c1b5; --muted:#948c80;
+    --border:rgba(255,255,255,0.12); --gridline:#332c39; --baseline:#3d3542;
+    --accent-a:#8b5cd6; --accent-b:#c9a6f2; --accent-ink:#1c1024;
+    --accent-strong:#c9b3f2; --accent-soft:rgba(155,120,219,0.16);
+    --good:#3fc23f; --good-soft:rgba(63,194,63,0.14);
+    --warning:#fab219; --warning-soft:rgba(250,178,25,0.14);
+    --serious:#ec835a; --serious-soft:rgba(236,131,90,0.14);
+    --critical:#e66767; --critical-soft:rgba(230,103,103,0.14);
+    --s1:#5b9bf0; --s2:#e8804d; --s3:#2fc78e; --s4:#e0a63a; --s5:#e987b0;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{background:var(--page); color:var(--ink); font-family:var(--font-body); padding:0 16px; padding-block:20px 48px; line-height:1.55;}
+  h1,h2,h3,h4{font-family:var(--font-display); text-wrap:balance; margin:0;}
+  p{margin:0;}
+  em{font-family:var(--font-serif); font-style:italic; font-weight:500;}
+  table{border-collapse:collapse;}
+  .wrap{max-width:1100px; margin:0 auto; display:flex; flex-direction:column; gap:28px;}
+
+  .masthead{display:flex; flex-direction:column; gap:14px;}
+  .kicker{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-serif); font-style:italic; font-weight:500; font-size:13.5px; color:var(--accent-strong); margin-bottom:8px;}
+  .kicker::before{content:''; width:6px; height:6px; border-radius:1.5px; background:var(--accent-strong); flex:none;}
+  h1.page-title{font-size:clamp(28px,4.2vw,36px); font-weight:800; letter-spacing:-0.01em;}
+  .meta-line{color:var(--ink-2); font-size:14.5px;}
+
+  .exec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media (max-width:820px){ .exec-grid{grid-template-columns:1fr;} }
+  .exec-item{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px 18px 16px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;}
+  .exec-item.highlight{background:linear-gradient(135deg,var(--accent-soft),var(--surface) 75%); border-color:var(--accent-strong);}
+  .exec-num{font-family:var(--font-mono); font-weight:700; font-size:12px; color:var(--accent-strong); letter-spacing:.04em;}
+  .exec-item h3{font-size:15.5px; font-weight:700; line-height:1.3;}
+  .exec-item p{font-size:13px; color:var(--ink-2); line-height:1.5;}
+  .exec-lead{font-size:13px; color:var(--muted);}
+
+  .kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .kpi{background:var(--surface); padding:16px 16px 14px; display:flex; flex-direction:column; gap:6px; min-width:0;}
+  .kpi-label{font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted);}
+  .kpi-value{font-family:var(--font-display); font-weight:800; font-size:21px; letter-spacing:-0.01em; font-variant-numeric:tabular-nums;}
+  .kpi-sub{font-size:12px; color:var(--ink-2);}
+  @media (max-width:820px){ .kpi-grid{grid-template-columns:repeat(2,1fr);} }
+
+  .tabbar{display:flex; gap:4px; overflow-x:auto; padding:5px; background:var(--surface-2); border:1px solid var(--border); border-radius:999px; scrollbar-width:thin;}
+  .tabbar button{flex:none; font:600 13px var(--font-body); color:var(--ink-2); background:transparent; border:none; padding:9px 16px; border-radius:999px; cursor:pointer; white-space:nowrap;}
+  .tabbar button:hover{color:var(--ink);}
+  .tabbar button[aria-selected="true"]{color:var(--accent-ink); background:linear-gradient(135deg,var(--accent-a),var(--accent-b));}
+  .tabbar button:focus-visible, a:focus-visible{outline:2px solid var(--accent-strong); outline-offset:2px;}
+  .panel{display:flex; flex-direction:column; gap:22px;}
+  .panel[hidden]{display:none;}
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; box-shadow:var(--shadow);}
+  .card-head{margin-bottom:10px;}
+  .card-note{font-size:12.5px; color:var(--muted);}
+  .section-title{font-size:19px; font-weight:700; letter-spacing:-0.01em;}
+  .lede{font-size:15px; font-weight:600; color:var(--ink); line-height:1.45;}
+  .grid-2{display:grid; grid-template-columns:1.2fr 1fr; gap:16px;}
+  @media (max-width:820px){ .grid-2{grid-template-columns:1fr;} }
+
+  .pill{display:inline-flex; align-items:center; gap:5px; font:600 11.5px var(--font-body); padding:4px 9px; border-radius:999px; white-space:nowrap;}
+  .pill.good{color:var(--good); background:var(--good-soft);}
+  .pill.warning{color:var(--warning); background:var(--warning-soft);}
+  .pill.critical{color:var(--critical); background:var(--critical-soft);}
+  .pill.neutral{color:var(--ink-2); background:var(--surface-2); border:1px solid var(--border);}
+  .pill .swatch{width:7px; height:7px; border-radius:999px; background:currentColor;}
+  .tag{display:inline-block; font:700 10.5px var(--font-mono); letter-spacing:.04em; text-transform:uppercase; padding:3px 8px; border-radius:5px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-2);}
+  .tag.optional{background:linear-gradient(135deg,var(--accent-a),var(--accent-b)); color:#fff; border-color:transparent;}
+
+  .tbl-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px;}
+  table.review{width:100%; min-width:520px; font-size:13.5px;}
+  table.review th{text-align:left; font:600 11px var(--font-body); letter-spacing:.03em; text-transform:uppercase; color:var(--muted); background:var(--surface-2); padding:9px 12px; border-bottom:1px solid var(--border); white-space:nowrap;}
+  table.review td{padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:middle;}
+  table.review tbody tr:last-child td{border-bottom:none;}
+  table.review tbody tr:hover{background:var(--surface-2);}
+  table.review td.num, table.review th.num{text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  .rowlabel{font-weight:700;}
+  .rowlabel .sub{display:block; font-weight:400; color:var(--muted); font-size:11.5px; margin-top:2px;}
+
+  .range-chart{display:flex; flex-direction:column; gap:16px; padding-top:24px;}
+  .range-row{display:grid; grid-template-columns:80px 1fr 78px; align-items:center; gap:12px;}
+  .range-row .rlabel{font:600 12.5px var(--font-body);}
+  .range-track{position:relative; height:26px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px;}
+  .range-fill{position:absolute; top:2px; bottom:2px; left:2px; border-radius:4px;}
+  .range-goal{position:absolute; top:-8px; bottom:-8px; width:2px; background:var(--critical); z-index:2;}
+  .range-goal.top::after{content:'Goal: 10,000'; position:absolute; top:-18px; left:50%; transform:translateX(-50%); font:700 10px var(--font-mono); color:var(--critical); white-space:nowrap;}
+  .range-row .rval{font:700 13px var(--font-mono); text-align:right; font-variant-numeric:tabular-nums;}
+  .range-legend{font-size:12.5px; color:var(--ink-2); padding-top:6px;}
+
+  .stack-bar{display:flex; height:34px; border-radius:8px; overflow:hidden; border:1px solid var(--border); gap:2px; background:var(--border);}
+  .stack-seg{display:flex; align-items:center; justify-content:center; font:700 11px var(--font-mono); color:#fff; min-width:2px;}
+  .stack-legend{display:flex; flex-wrap:wrap; gap:12px 18px; margin-top:12px; font-size:12px; color:var(--ink-2);}
+  .stack-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .stack-legend i{width:9px; height:9px; border-radius:3px; display:inline-block;}
+
+  .gantt{display:flex; flex-direction:column; gap:2px;}
+  .gantt-axis{display:grid; grid-template-columns:130px 1fr; margin-bottom:6px;}
+  .gantt-axis-track{position:relative; height:14px;}
+  .gantt-axis-track span{position:absolute; top:0; font:600 10px var(--font-mono); color:var(--muted); white-space:nowrap;}
+  .gantt-row{display:grid; grid-template-columns:130px 1fr; align-items:center; column-gap:12px; padding:8px 0;}
+  .gantt-row + .gantt-row{border-top:1px dashed var(--border);}
+  .gantt-label{font:700 12.5px var(--font-body); color:var(--ink); line-height:1.35;}
+  .gantt-label .dur{display:block; font:600 11px var(--font-mono); color:var(--muted); margin-top:2px;}
+  .gantt-track{position:relative; height:22px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px;}
+  .gantt-bar{position:absolute; top:2px; bottom:2px; border-radius:4px;}
+  .gantt-caption{grid-column:2; font-size:12.5px; color:var(--ink-2); margin-top:8px;}
+  @media (max-width:480px){ .gantt-axis, .gantt-row{grid-template-columns:88px 1fr;} }
+
+  .bullets{margin:0; padding-left:18px; display:flex; flex-direction:column; gap:8px; font-size:13.5px; color:var(--ink);}
+  .bullets li::marker{color:var(--muted);}
+  .dl{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:13px;}
+  .dl dt{color:var(--muted); font-weight:600;}
+  .dl dd{margin:0; color:var(--ink);}
+  .rule-line{display:flex; flex-wrap:wrap; gap:8px 22px; font-size:13px; padding-top:2px;}
+  .rule-line span b{font-weight:700;}
+  .subhead{font-size:12.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; margin-bottom:8px;}
+
+  footer{color:var(--muted); font-size:12px; text-align:center; padding-top:8px;}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="kicker">Test assignment &middot; Influencer Marketing Manager</span>
+    <h1 class="page-title">Certification Growth <em>Console</em></h1>
+    <p class="meta-line">Nebius wants 10,000 people to pass its AI certification exam by the end of 2026. The Builder Program and its certification are taken as the main program every campaign sends leads to. This is my plan for getting there with influencer marketing: which of the three approaches to fund, in what order, and how each funnel would be reviewed weekly. Every number is a base-case assumption.</p>
+  </div>
+
+  <div class="masthead">
+    <span class="exec-lead">The whole plan in three messages. Everything below is the reasoning behind them, one tab per approach.</span>
+    <div class="exec-grid">
+      <div class="exec-item highlight">
+        <span class="exec-num">01</span>
+        <h3>Put the money on the two fastest, cheapest levers</h3>
+        <p><b>1a</b> (paid YouTube sponsorships) and the <b>Certification Cup</b> (a live exam event) get full weight. <b>1b</b> (partnerships inside Udemy and Coursera courses) supports them. <b>Approach 2</b> (universities and professional communities) is a small, gated bet. <b>Approach 3</b> (an ambassador program) is planted now and pays off in 2027.</p>
+      </div>
+      <div class="exec-item">
+        <span class="exec-num">02</span>
+        <h3>Promising on paper, so fund it in stages</h3>
+        <p>The $400K influencer budget reaches ~9,200 of the 10,000 certified in the base case, about 800 short, so this plan alone does not close the goal. The range is 5,900 to 10,000 and rests on untested assumptions, so a funnel gets more budget only after proving its cost per certified.</p>
+      </div>
+      <div class="exec-item">
+        <span class="exec-num">03</span>
+        <h3>The Cup is the original idea</h3>
+        <p>A live, gamified exam where creators and viewers compete on one leaderboard. It fixes the biggest leak in a normal sponsored video: people register, then never sit the exam. Modeled at roughly 2.5&times; more certified from the same reach.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-label">Goal</span><span class="kpi-value">10,000 certified</span><span class="kpi-sub">by Dec 31, 2026</span></div>
+    <div class="kpi"><span class="kpi-label">Budget</span><span class="kpi-value">$1M total</span><span class="kpi-sub">$400K (40%) to influencer marketing</span></div>
+    <div class="kpi"><span class="kpi-label">Base-case model</span><span class="kpi-value">~9,200 certified</span><span class="kpi-sub">range: 5,900&ndash;10,000</span></div>
+    <div class="kpi"><span class="kpi-label">Runway</span><span class="kpi-value">~14 weeks</span><span class="kpi-sub">last new sign-ups by mid-Nov</span></div>
+  </div>
+
+  <div class="tabbar" role="tablist" aria-label="Console sections">
+    <button role="tab" aria-selected="true" data-tab="overview">Overview &amp; Reasoning</button>
+    <button role="tab" aria-selected="false" data-tab="a1">Approach 1 &middot; Creators</button>
+    <button role="tab" aria-selected="false" data-tab="a2">Approach 2 &middot; Community</button>
+    <button role="tab" aria-selected="false" data-tab="a3">Approach 3 &middot; Ambassadors</button>
+    <button role="tab" aria-selected="false" data-tab="cup">New idea &middot; Cup <span class="tag optional">Optional</span></button>
+    <button role="tab" aria-selected="false" data-tab="method">Method &amp; Numbers</button>
+  </div>
+
+  <section class="panel" id="panel-overview">
+
+    <p class="exec-lead">The three messages above, expanded one question at a time.</p>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">The three approaches</span><div class="section-title">Q1 &middot; Are all three <em>worth testing</em>?</div></div>
+      <p class="lede">Two are worth testing against this year's goal, and one is not. Approach 1 carries the volume, Approach 2 is cheap insurance, and Approach 3 can't produce results in this cycle, so it is not scored in 2026 and runs only as a no-cost pilot. One new idea, the Certification Cup, is added on top.</p>
+      <div class="tbl-wrap" style="margin-top:14px;">
+        <table class="review">
+          <thead><tr><th>Assignment approach</th><th>Role in the plan</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="rowlabel">1. Technical Creator Partnerships<span class="sub">run as two funnels: 1a YouTube sponsorships, 1b Udemy and Coursera partnerships</span></td><td><span class="pill good"><i class="swatch"></i>Primary volume</span></td><td>The fastest signal, and the only lever with enough reach to matter on its own.</td></tr>
+            <tr><td class="rowlabel">2. Community &amp; Ecosystem<span class="sub">batch deals with universities and professional groups</span></td><td><span class="pill neutral"><i class="swatch"></i>Small, gated hedge</span></td><td>Institutional deals take 4&ndash;8 weeks to close, so it has to start in week 1. It stays small because most institutions approached cold say no.</td></tr>
+            <tr><td class="rowlabel">3. Ambassador Program<span class="sub">no 2026 funnel; runs as a no-cost pilot</span></td><td><span class="pill neutral"><i class="swatch"></i>Not scored in 2026</span></td><td>A certified base already exists to recruit from. The real limit is time: a referral-driving community takes months to build trust, and this year doesn't have months left to spare.</td></tr>
+            <tr><td class="rowlabel">New idea: Certification Cup<span class="sub">optional proposal, not in the brief</span></td><td><span class="pill good"><i class="swatch"></i>Primary volume</span></td><td>A live, gamified exam event that fixes the biggest leak in a normal sponsored video, people who register and never sit the exam.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Sequencing</span><div class="section-title">Q2 &middot; The order, <em>and why</em></div></div>
+      <p class="lede">1a launches week 1 because it's the fastest way to get real data. Approach 2 opens the same week, even though it's minor, because its 4&ndash;8 week deal cycle runs regardless of start date. Approach 3 has no clock; it gets seeded passively, through whichever creators the Cup brings together.</p>
+      <div class="gantt" style="margin-top:18px;">
+        <div class="gantt-axis">
+          <span></span>
+          <div class="gantt-axis-track">
+            <span style="left:0%;">Wk 0</span>
+            <span style="left:14.3%; transform:translateX(-50%);">Wk 2</span>
+            <span style="left:28.6%; transform:translateX(-50%);">Wk 4</span>
+            <span style="left:57.1%; transform:translateX(-50%);">Wk 8</span>
+            <span style="left:100%; transform:translateX(-100%);">Wk 14</span>
+          </div>
+        </div>
+        <div class="gantt-row">
+          <span class="gantt-label">Prep &amp; launch<span class="dur">2 weeks</span></span>
+          <div class="gantt-track"><div class="gantt-bar" style="left:0%; width:14.3%; background:var(--s1);"></div></div>
+          <p class="gantt-caption">1a and 1b deals get signed; Approach 2 outreach opens to the first target institutions.</p>
+        </div>
+        <div class="gantt-row">
+          <span class="gantt-label">Test &amp; decide<span class="dur">2 weeks</span></span>
+          <div class="gantt-track"><div class="gantt-bar" style="left:14.3%; width:14.3%; background:var(--s3);"></div></div>
+          <p class="gantt-caption">The Cup event runs. Week 3 is judged on early signals (cost per registration, attempt rate, projected cost per certified), because people signed up that week haven't sat the exam yet. Approach 2 hits its first gate.</p>
+        </div>
+        <div class="gantt-row">
+          <span class="gantt-label">Scale<span class="dur">4 weeks</span></span>
+          <div class="gantt-track"><div class="gantt-bar" style="left:28.6%; width:28.6%; background:var(--s2);"></div></div>
+          <p class="gantt-caption">Held-back budget goes to whatever passed its gate. Last new sign-ups close in week 7 (mid-November), leaving enough time to prepare for the exam. Approach 2 hits its second, harder gate.</p>
+        </div>
+        <div class="gantt-row">
+          <span class="gantt-label">Conversion tail<span class="dur">6 weeks</span></span>
+          <div class="gantt-track"><div class="gantt-bar" style="left:57.1%; width:42.9%; background:var(--muted);"></div></div>
+          <p class="gantt-caption">No new spend. Reminders and retakes help people already signed up finish before December 31, and actual cost per certified replaces the projections.</p>
+        </div>
+      </div>
+      <p class="card-note" style="margin-top:10px;">A "gate" is a scheduled go/no-go check: funnels that work keep or gain budget, the rest lose it.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Comparison</span><div class="section-title">What's better, what's worse, <em>on what measure</em></div></div>
+      <p class="lede">No single funnel wins on everything. That's why the plan runs more than one.</p>
+      <div class="rule-line" style="margin:14px 0 16px;">
+        <span>Fastest result: <b>the Cup</b>, live in one day</span>
+        <span>Cheapest per certified: <b>the Cup</b> (~$23), then 1b and 1a (~$27&ndash;28)</span>
+        <span>Warmest audience: <b>1b</b>, people who already paid for the subject</span>
+        <span>Most room to scale: <b>1a</b>, limited only by creator supply</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="review">
+          <thead><tr><th></th><th>1a &middot; YouTube</th><th>1b &middot; Courses</th><th>Cup</th><th>Hedge</th><th>Seed</th></tr></thead>
+          <tbody>
+            <tr><td class="rowlabel">Cost driver</td><td>CPM (pay per view)</td><td>Flat integration fee</td><td>One-time event cost</td><td>Mostly staff time</td><td>Near-zero</td></tr>
+            <tr><td class="rowlabel">Audience warmth</td><td>Cold</td><td>Warm, paying</td><td>Warm, live and social</td><td>Warm, institutional</td><td>Hottest, peer</td></tr>
+            <tr><td class="rowlabel">Biggest leak</td><td>Register &rarr; attempt</td><td>Awareness, few see it</td><td>Collapsed by design</td><td>The deal itself</td><td>&mdash;</td></tr>
+            <tr><td class="rowlabel">What limits its size</td><td>Creator supply</td><td>Number of large courses</td><td>Live-capable creators</td><td>Few qualifying institutions</td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Risk</span><div class="section-title">How confident should we be <em>in the plan</em>?</div></div>
+      <p class="lede">The base case lands at 92% of the goal, and even the best case (9,976) nearly reaches 10,000. Influencer marketing alone is not sufficient: the other channels in the $1M have to cover the gap.</p>
+      <div class="range-chart">
+        <div class="range-row"><span class="rlabel">Bear case</span><div class="range-track"><div class="range-fill" style="width:53.4%; background:#86b6ef;"></div><div class="range-goal top" style="left:90.9%;"></div></div><span class="rval">5,900</span></div>
+        <div class="range-row"><span class="rlabel">Base case</span><div class="range-track"><div class="range-fill" style="width:83.8%; background:var(--s1);"></div><div class="range-goal" style="left:90.9%;"></div></div><span class="rval">9,200</span></div>
+        <div class="range-row"><span class="rlabel">Best case</span><div class="range-track"><div class="range-fill" style="width:90.7%; background:var(--accent-strong);"></div><div class="range-goal" style="left:90.9%;"></div></div><span class="rval">10,000</span></div>
+      </div>
+      <p class="range-legend">Bear assumes the funnels perform worse than modeled; best assumes they perform better. That gap, not just the base case, is why the budget releases in stages instead of all at once. Exactly how each scenario is built is on the Method tab.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Budget</span><div class="section-title">Reviewing the portfolio, <em>not one funnel at a time</em></div></div>
+      <p class="lede">One weekly rule decides where the money goes: the funnel with the lowest cost for its next increment of certified people gets the next dollar.</p>
+      <p style="font-size:13.5px; color:var(--ink-2); margin-top:10px;">Each week, rank the live funnels by their recent cost per certified, counting only those with enough attempts to trust the number. Read it as the cost of the latest spend, not the running average, because cost rises as a funnel scales (the ~$60 scale-phase assumption builds that in), and cap each funnel at the creators it can actually book. In the first weeks, use a projected figure built from cost per registration and attempt rate, since few people have finished the exam yet. A funnel in "modify" gets one cycle to improve; one that hits "stop" loses its budget that day.</p>
+      <div class="stack-bar" style="margin-top:16px;">
+        <div class="stack-seg" style="width:12.5%; background:var(--s1);" title="1a $50K">1a</div>
+        <div class="stack-seg" style="width:8%; background:var(--s2);" title="1b $32K">1b</div>
+        <div class="stack-seg" style="width:12.5%; background:var(--s3);" title="Cup $50K">Cup</div>
+        <div class="stack-seg" style="width:6.25%; background:var(--s4);" title="Hedge $25K">Hedge</div>
+        <div class="stack-seg" style="width:60.75%; background:var(--gridline); color:var(--ink-2);" title="Scale-phase reserve $243K">Scale reserve $243K</div>
+      </div>
+      <div class="stack-legend">
+        <span><i style="background:var(--s1)"></i>1a test tranche $50K</span>
+        <span><i style="background:var(--s2)"></i>1b $32K</span>
+        <span><i style="background:var(--s3)"></i>Cup $50K</span>
+        <span><i style="background:var(--s4)"></i>Hedge $25K</span>
+        <span><i style="background:var(--gridline)"></i>Scale reserve $243K, released only to what clears its gate</span>
+      </div>
+      <p class="card-note" style="margin-top:12px;">This is the $400K influencer envelope. The other $600K funds non-influencer channels (paid ads, owned, sales) and sits outside this model. Cost per certified counts influencer spend only; any per-attempt exam cost (platform, proctoring if used) is assumed funded elsewhere. If it fell on this budget, each certified would cost more by the per-attempt cost divided by the 65% pass rate; at an illustrative $5 per attempt, $28 becomes about $36.</p>
+    </div>
+
+  </section>
+
+  <section class="panel" id="panel-a1" hidden>
+    <p class="exec-lead">Approach 1 runs as two funnels: 1a (YouTube sponsorships) and 1b (partnerships inside Udemy and Coursera courses).</p>
+    <div class="card">
+      <div class="card-head"><span class="kicker">Primary channel</span><div class="section-title" style="color:var(--s1)">1a &middot; YouTube technical creators</div></div>
+      <p class="lede">1a reaches cold traffic that doesn't trust Nebius yet. It earns the primary budget on reach and repeatability, since creator supply is deep enough to scale for months. The one thing that decides its success is getting someone from registered to actually attempting the exam.</p>
+
+      <div class="tbl-wrap" style="margin-top:16px;">
+        <table class="review">
+          <thead><tr><th>Stage</th><th>What moves someone through it</th><th class="num">Base case</th></tr></thead>
+          <tbody>
+            <tr><td class="rowlabel">Views</td><td>Sponsorship weighted toward content fit over raw reach</td><td class="num">1,000,000</td></tr>
+            <tr><td class="rowlabel">Clicks</td><td>Single CTA, pinned comment plus an on-screen callout early in the video</td><td class="num">20,000 (2.0%)</td></tr>
+            <tr><td class="rowlabel">Registered</td><td>One-field landing page, exam code pre-filled</td><td class="num">5,000 (25%)</td></tr>
+            <tr><td class="rowlabel">Attempted</td><td>Automated 48-hour and 7-day nudges close the funnel's biggest leak</td><td class="num">2,750 (55%)</td></tr>
+            <tr><td class="rowlabel">Certified</td><td>Pass rate tracked per creator</td><td class="num">1,788 (65%)</td></tr>
+            <tr><td class="rowlabel">Cost per certified</td><td></td><td class="num">~$28</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top:18px;">
+        <div>
+          <p class="subhead">Continue, modify, scale, or stop</p>
+          <div class="rule-line">
+            <span><span class="pill good"><i class="swatch"></i>Scale</span> cost/certified &le;$35, &ge;500 attempts</span>
+            <span><span class="pill neutral"><i class="swatch"></i>Continue</span> $35&ndash;60</span>
+            <span><span class="pill warning"><i class="swatch"></i>Modify</span> $60&ndash;100, or attempt rate &lt;40%</span>
+            <span><span class="pill critical"><i class="swatch"></i>Stop</span> &gt;$100 sustained 2 weeks</span>
+          </div>
+          <p class="card-note" style="margin-top:8px;">Bands are set against the plan: scale within ~25% of the $28 plan, continue up to the ~$60 the scale phase assumes, stop above $100.</p>
+        </div>
+        <div>
+          <p class="subhead">Hypotheses to validate</p>
+          <ul class="bullets">
+            <li>Blended CPM holds across a broad creator set, not just the first few signed</li>
+            <li>A low, promotional exam price doesn't cut show-up commitment</li>
+            <li>Pass rate holds without added prep support</li>
+          </ul>
+        </div>
+      </div>
+      <p class="card-note" style="margin-top:16px;">At scale, new creator deals shift to a hybrid structure: mostly flat fee, plus a smaller bonus per certified. That ties the creator's incentive to certifications instead of views.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Weekly review</span><div class="section-title">What a review of 1a looks like in <em>week 3</em></div></div>
+      <p class="lede">Every Monday each funnel is read against plan and gets one decision. This is an illustration with made-up actuals, not data.</p>
+      <div class="tbl-wrap" style="margin-top:14px;">
+        <table class="review">
+          <thead><tr><th>Metric</th><th class="num">Plan</th><th class="num">Week 3 (example)</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="rowlabel">Click-through rate</td><td class="num">2.0%</td><td class="num">2.1%</td><td><span class="pill good"><i class="swatch"></i>On track</span></td></tr>
+            <tr><td class="rowlabel">Registration rate</td><td class="num">25%</td><td class="num">23%</td><td><span class="pill good"><i class="swatch"></i>On track</span></td></tr>
+            <tr><td class="rowlabel">Attempt rate</td><td class="num">55%</td><td class="num">38%</td><td><span class="pill warning"><i class="swatch"></i>Below 40% floor</span></td></tr>
+            <tr><td class="rowlabel">Projected cost per certified</td><td class="num">~$28</td><td class="num">~$42</td><td><span class="pill neutral"><i class="swatch"></i>Continue band</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13.5px; color:var(--ink-2); margin-top:12px;"><b>Decision: modify.</b> The attempt rate is the leak, so add a 3-day reminder to the nudge sequence and retest the call to action. Budget holds because projected cost per certified (~$42) sits in the continue band. Re-check next Monday.</p>
+      <p class="card-note" style="margin-top:8px;">Week 3 uses projected cost per certified (built from registrations and attempt rate) because people signed up that week haven't sat the exam yet. Actual figures replace it as attempts mature.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Secondary channel</span><div class="section-title" style="color:var(--s2)">1b &middot; Course-embedded (Udemy / Coursera)</div></div>
+      <p class="lede">1b runs on a different mechanic than 1a. These instructors have no live audience, but they have students who already paid for this exact subject. That warmth converts better than cold traffic, but only if the instructor promotes it, and only in pulses around each broadcast.</p>
+
+      <div class="tbl-wrap" style="margin-top:16px;">
+        <table class="review">
+          <thead><tr><th>Stage</th><th>What moves someone through it</th><th class="num">Base case (4 instructors, ~50K enrolled each)</th></tr></thead>
+          <tbody>
+            <tr><td class="rowlabel">Reach</td><td>Four instructors of large cloud, AI, ML, or Python courses</td><td class="num">200,000</td></tr>
+            <tr><td class="rowlabel">Sees announcement</td><td>Instructor sends a platform announcement to enrolled students</td><td class="num">40,000 (20%)</td></tr>
+            <tr><td class="rowlabel">Clicks</td><td>Bonus lecture embedded inside the course</td><td class="num">6,000 (15%)</td></tr>
+            <tr><td class="rowlabel">Registered</td><td>Embedded code from a trusted source, well above the 25% cold-traffic rate</td><td class="num">3,000 (50%)</td></tr>
+            <tr><td class="rowlabel">Attempted</td><td>Async exam, no live component</td><td class="num">1,800 (60%)</td></tr>
+            <tr><td class="rowlabel">Certified</td><td></td><td class="num">1,170 (65%)</td></tr>
+            <tr><td class="rowlabel">Cost per certified</td><td>Flat integration fees, not CPM</td><td class="num">~$27</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid-2" style="margin-top:18px;">
+        <div>
+          <p class="subhead">Continue, modify, scale, or stop, per instructor</p>
+          <div class="rule-line">
+            <span><span class="pill good"><i class="swatch"></i>Scale</span> cost/certified &le;$35 &rarr; sign more instructors like this one</span>
+            <span><span class="pill neutral"><i class="swatch"></i>Continue</span> $35&ndash;60 &rarr; keep as is</span>
+            <span><span class="pill warning"><i class="swatch"></i>Modify</span> $60&ndash;100 or visibility &lt;15% &rarr; add a reminder nudge first</span>
+            <span><span class="pill critical"><i class="swatch"></i>Stop</span> &gt;$100 after one modify cycle &rarr; don't renew</span>
+          </div>
+        </div>
+        <div>
+          <p class="subhead">Hypotheses to validate</p>
+          <ul class="bullets">
+            <li>The 20% announcement-visibility figure holds well enough as a planning average</li>
+            <li>Instructor-endorsed codes convert meaningfully above cold-view rates</li>
+          </ul>
+        </div>
+      </div>
+      <p class="card-note" style="margin-top:16px;">Volume arrives in pulses around each broadcast, so 1b is reviewed per instructor, not per week. The 20% is an average; expect wide variation between instructors.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Creator management</span><div class="section-title">How creators are picked and managed</div></div>
+      <div class="dl">
+        <dt>Sourcing</dt><dd>Technical YouTube channels (cloud, ML, developer tutorials) in three tiers: a few large channels, more mid-size ones, and small ones to test cost per certified cheaply.</dd>
+        <dt>Vetting</dt><dd>Audience quality (real comments, engagement relative to views), audience geography against target regions, and overlap between creators. Channels with inflated numbers, such as sudden view spikes or views far out of line with subscribers, are dropped.</dd>
+        <dt>Brief and approval</dt><dd>One call to action and the key facts. The creator writes the script; Nebius approves facts, disclosure and brand safety before posting.</dd>
+        <dt>Terms</dt><dd>Flat fee, plus a bonus per certified at scale; usage rights so strong videos can be boosted as ads; disclosure; and a clause to pause the deal if a brand-safety issue appears.</dd>
+        <dt>Reporting</dt><dd>Every creator gets their own code and landing page and is reviewed on cost per certified. Winners get repeat deals, usually at a 20&ndash;35% premium; the rest rotate out.</dd>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-cup" hidden>
+    <div class="card">
+      <div class="card-head">
+        <span class="kicker">Optional</span>
+        <div class="section-title" style="color:var(--s3)">The Certification Cup</div>
+      </div>
+      <p class="lede">A normal sponsored video leaks at one point: people register, then never sit the exam. The Cup closes that gap by design. Four to six creators take the same exam live, head to head, and their audiences take it with them.</p>
+      <p style="font-size:13.5px; color:var(--ink-2); margin-top:10px;">Timed rounds, on-screen rank changes and one shared leaderboard put creators and viewers in the same contest. Beating a favorite creator is a reason to sit the exam, not just watch. Off camera, the creators meet, give feedback on the exam and become the founding cohort of Approach 3. It remains a bet, tested as a hypothesis.</p>
+      <p style="font-size:13.5px; color:var(--ink-2); margin-top:10px;"><b>Indirect evidence:</b> Nebius already runs a competitive format, its Global AI Hackathon (over $50K in prizes). Comparable developer contests reportedly draw far more people, about 9,200 registrants for AWS's and 25,000 for RevenueCat's against about 3,500 for Nebius's (a third-party tracker, mid-September; I have not verified the counts). That points to reach, not format, as the constraint, and reach is what creators supply. Hackathon sign-ups are not exam registrations, so this supports the hypothesis without proving the lift.</p>
+
+      <div class="tbl-wrap" style="margin-top:16px;">
+        <table class="review">
+          <thead><tr><th>Stage</th><th class="num">Standard sponsored video</th><th class="num">Certification Cup</th></tr></thead>
+          <tbody>
+            <tr><td>Views (same reach)</td><td class="num">500,000</td><td class="num">500,000</td></tr>
+            <tr><td>Clicks (2%)</td><td class="num">10,000</td><td class="num">10,000</td></tr>
+            <tr><td>Registered</td><td class="num">2,500 (25%)</td><td class="num">4,000 (40%)</td></tr>
+            <tr><td>Attempted, same session vs. later</td><td class="num">1,375 (55%)</td><td class="num">3,400 (85%)</td></tr>
+            <tr><td><b>Certified (65% pass either way)</b></td><td class="num">894</td><td class="num"><b>2,210</b></td></tr>
+            <tr><td>Cost per certified</td><td class="num">~$28 ($25K)</td><td class="num">~$23 ($50K)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="card-note" style="margin-top:12px;">Same reach, roughly 2.5&times; more certified, because register and attempt collapse into one moment. The Cup's $50K includes the event itself. Its creators are assumed to be separate from 1a's, so nobody is counted twice.</p>
+      <p class="card-note" style="margin-top:8px;"><b>Dependency, before any creator is contracted:</b> confirm with the certification team that the exam can be taken live on camera without exposing its questions, and that the platform can handle ~3,400 attempts in one session. If not, the Cup runs on a dedicated event version of the exam or on practice rounds, and the 85% attempt rate needs re-checking.</p>
+
+      <div class="grid-2" style="margin-top:18px;">
+        <div>
+          <p class="subhead">Review and decision rule</p>
+          <p style="font-size:13.5px; color:var(--ink-2);">One after-action report per event: registrations, live attempts, certified. <b>Repeat quarterly</b> if it beats a standard sponsored video from the same creators; otherwise stop.</p>
+        </div>
+        <div>
+          <p class="subhead">Hypotheses to validate</p>
+          <ul class="bullets">
+            <li>Gamifying the exam engages a technical audience instead of feeling gimmicky</li>
+            <li>Live, same-session format lifts attempts to ~85%</li>
+            <li>The creator round table produces at least one lasting collaboration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-a2" hidden>
+    <div class="card">
+      <div class="card-head"><span class="kicker">Insurance</span><div class="section-title" style="color:var(--s4)">Approach 2 &middot; Community &amp; Ecosystem</div></div>
+      <p class="lede">Approach 2 is insurance in case 1a underperforms. One signed deal with a university department or professional association can put the exam in front of a whole cohort, including people who never watch tech YouTubers or browse Udemy. It stays small and gated so it never competes with 1a for budget.</p>
+      <div class="tbl-wrap" style="margin-top:14px;">
+        <table class="review">
+          <thead><tr><th>Stage</th><th>What it looks like</th><th class="num">Base case</th><th>Gate</th></tr></thead>
+          <tbody>
+            <tr><td class="rowlabel">Contacted</td><td>3&ndash;4 institutions per region (Americas, EMEA, APAC), batch-voucher proposal in week 1</td><td class="num">12</td><td>&mdash;</td></tr>
+            <tr><td class="rowlabel">In conversation</td><td>Replied and took a meeting</td><td class="num">4 (33%)</td><td><span class="pill neutral">Week 4, none in a region &rarr; stop, move budget to 1a</span></td></tr>
+            <tr><td class="rowlabel">Signed</td><td>Co-branded deal, joint webinar</td><td class="num">2 (50%)</td><td>&mdash;</td></tr>
+            <tr><td class="rowlabel">Codes distributed</td><td>Each partner sends codes to a cohort of ~1,000 (assumed)</td><td class="num">2,000</td><td>&mdash;</td></tr>
+            <tr><td class="rowlabel">Registered</td><td>Codes redeemed</td><td class="num">600 (30%)</td><td><span class="pill neutral">Week 7, not redeeming &rarr; stop</span></td></tr>
+            <tr><td class="rowlabel">Attempted</td><td></td><td class="num">360 (60%)</td><td>&mdash;</td></tr>
+            <tr><td class="rowlabel">Certified</td><td></td><td class="num">234 (65%)</td><td>&mdash;</td></tr>
+            <tr><td class="rowlabel">Cost per certified</td><td>$25K, mostly staff time</td><td class="num">~$107</td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="card-note" style="margin-top:12px;">At ~$107 per certified it costs more than 1a or 1b, which is why it stays small, and it is left out of the ~9,200 total because it must clear two gates first. Deals take 4&ndash;8 weeks to close, so it only pays if one is signed by about week 5, leaving time for codes to redeem before sign-ups close in week 7; a later deal becomes 2027 pipeline. Hypotheses: at least one institution per region engages within four weeks, and institutional codes convert above cold-traffic rates.</p>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-a3" hidden>
+    <div class="card">
+      <div class="card-head"><span class="kicker">Long-term</span><div class="section-title" style="color:var(--s5)">Approach 3 &middot; Ambassador seed</div></div>
+      <p class="lede">Approach 3 is not scored against this year's goal, so I build no 2026 funnel for it and run it as a no-cost pilot. The certified base to build it from already exists; what it needs is time this year doesn't have. Seeding it now means 2027 doesn't start cold.</p>
+      <div class="dl" style="margin-top:12px;">
+        <dt>Founding cohort</dt><dd>The Cup's round-table creators, its top live certifiers, and a small group of the most engaged people from the existing certified base</dd>
+        <dt>Why they'd bother</dt><dd>No payment. They get public recognition as a founding Ambassador, first access to new courses and credits, and a seat on a quarterly call about upcoming course and exam changes.</dd>
+        <dt>How it runs</dt><dd>A private Discord with one informal monthly call with the Academy team; the rest is peer chat. Each member has a referral code and sees a cohort-only leaderboard, the same mechanic as the Cup. Run part-time by whoever manages the Cup creators, with no new hire.</dd>
+        <dt>Stop rule</dt><dd>If fewer than half the founding members are active in the Discord by the end of month two, stop and drop it from the 2027 plan.</dd>
+        <dt>2027 handoff</dt><dd>If the lean version shows signal, the proposal asks for a funded community manager and structured programming.</dd>
+      </div>
+      <p class="card-note" style="margin-top:12px;">Reviewed monthly, not weekly. Hypothesis: recognition and access alone, with no paid incentive, generate organic referrals.</p>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-method" hidden>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Sensitivity</span><div class="section-title">The full range, not just the base case</div></div>
+      <div class="tbl-wrap">
+        <table class="review">
+          <thead><tr><th>Line</th><th class="num">Bear</th><th class="num">Base</th><th class="num">Best</th></tr></thead>
+          <tbody>
+            <tr><td>1a test phase</td><td class="num">1,100</td><td class="num">1,788</td><td class="num">1,950</td></tr>
+            <tr><td>1b (4 instructors)</td><td class="num">742</td><td class="num">1,170</td><td class="num">1,268</td></tr>
+            <tr><td>Certification Cup</td><td class="num">1,540</td><td class="num">2,210</td><td class="num">2,340</td></tr>
+            <tr><td>Scale phase ($243K reserve)</td><td class="num">2,492</td><td class="num">4,050</td><td class="num">4,418</td></tr>
+            <tr><td>Approach 2</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+            <tr><td><b>Total</b></td><td class="num"><b>5,874</b></td><td class="num"><b>9,218</b></td><td class="num"><b>9,976</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="card-note" style="margin-top:12px;"><b>Bear:</b> every attempt rate 15 points lower and every pass rate 10 points lower. <b>Best:</b> every attempt rate 5 points higher, pass rates unchanged. <b>Scale phase:</b> the $243K reserve buys certifications at ~$60 each in the base case, about twice the test-phase cost, allowing for creator fatigue and rising prices. Bear and best move that cost by the same yield change as the test phase. Approach 2 is zero in every column because it is unproven; its modeled ~230 certified would be upside on top.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Tracking</span><div class="section-title">How I'd track this <em>without fooling myself</em></div></div>
+      <ul class="bullets">
+        <li>The one KPI every funnel is judged on: cost per certified, never a raw volume or engagement number, and never calculated until there are enough attempts to trust the ratio.</li>
+        <li>One code and one landing page per creator or partner. Registrations attribute to a single source instead of a creator's own estimate.</li>
+        <li>First-touch attribution, with a dedup rule for anyone exposed to more than one paid source. No one counts toward two funnels.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="kicker">Sources</span><div class="section-title">Which numbers are <em>sourced</em></div></div>
+      <div class="grid-2">
+        <div>
+          <p class="subhead">From outside sources</p>
+          <ul class="bullets">
+            <li><b>$1 exam price:</b> Nebius's Builder Program certification, taken as the main program every campaign sends leads to</li>
+            <li><b>Hackathon and its $50K+ prize:</b> Nebius's site</li>
+            <li><b>CPM $40&ndash;80, pass rates 55&ndash;78%, 20&ndash;35% repeat-creator premium:</b> industry benchmarks, low confidence</li>
+            <li><b>Hackathon registrations and the creator-cost study:</b> third-party, unverified</li>
+          </ul>
+        </div>
+        <div>
+          <p class="subhead">My planning assumptions</p>
+          <ul class="bullets">
+            <li><b>Every conversion rate</b> in the funnels, plus the 20% announcement visibility</li>
+            <li><b>The Cup's lift</b> (40% register, 85% attempt): the least tested and most important</li>
+            <li><b>The ~$60 scale-phase cost</b> and all Approach 2 numbers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>A plan for 10,000 certified on a $1M budget. Every number is a base-case assumption.</footer>
+</div>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tabbar button');
+  var panels = {
+    overview: document.getElementById('panel-overview'),
+    a1: document.getElementById('panel-a1'),
+    a2: document.getElementById('panel-a2'),
+    a3: document.getElementById('panel-a3'),
+    cup: document.getElementById('panel-cup'),
+    method: document.getElementById('panel-method')
+  };
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabs.forEach(function(b){ b.setAttribute('aria-selected','false'); });
+      Object.keys(panels).forEach(function(k){ panels[k].hidden = true; });
+      btn.setAttribute('aria-selected','true');
+      panels[btn.getAttribute('data-tab')].hidden = false;
+      btn.scrollIntoView({block:'nearest', inline:'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    });
+  });
+})();
+</script>
+
+</body></html>
